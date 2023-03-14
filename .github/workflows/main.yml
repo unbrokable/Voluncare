@@ -1,0 +1,34 @@
+name: Publish services
+
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+    - dev
+    - github-actions
+    
+jobs:
+  publish-api:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-versions: '6.0.x'
+      
+      - name: Restore
+        run: dotnet restore .\Voluncare.Server.API\Voluncare.Managment\Voluncare.Managment.sln
+        
+      - name: Build 
+        run: dotnet build .\Voluncare.Server.API\Voluncare.Managment\Voluncare.Managment.sln --configuration Release --no-restore
+      
+      - name: Publish 
+        run: dotnet publish .\Voluncare.Server.API\Voluncare.Managment\Voluncare.Managment.sln --configuration Release --no-build
+        
+      
+          
+        
+          
