@@ -21,30 +21,27 @@ jobs:
       REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
       REGISTRY_USERNAME: voluncare
       REGISTRY_PASSWORD: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
+      IMAGE_NAME: voluncare-api
       
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
       
-#       - name: Setup .NET
-#         uses: actions/setup-dotnet@v3
-#         with:
-#           dotnet-versions: '6.0.x'
-      
-#       - name: Restore
-#         run: dotnet restore ${{ env.SOLUTION_PATH }}
+      - name: Build Docker Image
+        run: docker build -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest -f ${{ env.DOCKER_FILE_PATH }} .
         
-#       - name: Build 
-#         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
-      
-#       - name: Publish 
-#         run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-build
-
+      - name: Tag Docker Image
+        run: docker tag ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        
       - name: 'Docker Login'
         uses: azure/docker-login@v1
         with:
           login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
           username: ${{ env.REGISTRY_USERNAME }}
           password: ${{ env.REGISTRY_PASSWORD }}
+  
+      - name: Build and Push Docker Image
+        run: docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Push Docker image to Azure Container Registry
         uses: docker/build-push-action@v2
