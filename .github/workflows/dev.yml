@@ -21,24 +21,27 @@ jobs:
       REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
       REGISTRY_USERNAME: voluncare
       REGISTRY_PASSWORD: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
+      IMAGE_NAME: voluncare-api
       
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Build Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: false
-          file: ${{ env.DOCKER_FILE_PATH }}
-
+      - name: Build Docker Image
+        run: docker build -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest -f ${{ env.DOCKER_FILE_PATH }} .
+        
+      - name: Tag Docker Image
+        run: docker tag ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        
       - name: 'Docker Login'
         uses: azure/docker-login@v1
         with:
           login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
           username: ${{ env.REGISTRY_USERNAME }}
           password: ${{ env.REGISTRY_PASSWORD }}
+  
+      - name: Build and Push Docker Image
+        run: docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Push Docker image to Azure Container Registry
         uses: docker/build-push-action@v2
