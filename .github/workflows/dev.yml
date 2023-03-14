@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      DOCKER_FILE_PATH: ./Voluncare.Server.API/Voluncare.Managment/Voluncare.Managment/Dockerfile
+      DOCKER_FILE_PATH: ./Voluncare.Server.API/Voluncare.Managment/Dockerfile
       SOLUTION_PATH: ./Voluncare.Server.API/Voluncare.Managment/Voluncare.Managment.sln
       REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
       REGISTRY_USERNAME: voluncare
