@@ -7,8 +7,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Voluncare.Managment/Voluncare.Managment.csproj", "Voluncare.Managment/"]
-COPY ["Voluncare.Services/Voluncare.Services.csproj", "Voluncare.Services/"]
+COPY ["./Voluncare.Managment/Voluncare.Managment.csproj", "Voluncare.Managment/"]
+COPY ["./Voluncare.Services/Voluncare.Services.csproj", "Voluncare.Services/"]
 
 RUN dotnet restore "Voluncare.Managment/Voluncare.Managment.csproj"
 
