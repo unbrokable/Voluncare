@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      DOCKER_FILE_PATH: ./Voluncare.Server.API/Voluncare.Managment/Dockerfile
+      DOCKER_FILE_PATH: ./Voluncare.Server.API/Voluncare.Managment
       SOLUTION_PATH: ./Voluncare.Server.API/Voluncare.Managment/Voluncare.Managment.sln
       REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
       REGISTRY_USERNAME: voluncare
@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Build Docker Image
-        run: docker build -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest -f ${{ env.DOCKER_FILE_PATH }} .
+        run: docker build ${{ env.DOCKER_FILE_PATH }} -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest  
         
       - name: Tag Docker Image
         run: docker tag ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
@@ -42,14 +42,9 @@ jobs:
   
       - name: Build and Push Docker Image
         run: docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-      - name: Push Docker image to Azure Container Registry
-        uses: docker/build-push-action@v2
+      
+      - uses: azure/webapps-deploy@v2
         with:
-          context: .
-          push: true
-          tags: ${{ env.REGISTRY_USERNAME }}/voluncare-api:${{ github.sha }}
-          file: ${{ env.DOCKER_FILE_PATH }}
-          
-        
-          
+          app-name: 'voluncare-api'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
