@@ -25,6 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - name: Clear Docker
+        run: docker system prune -af
 #       - name: Setup .NET
 #         uses: actions/setup-dotnet@v3
 #         with:
