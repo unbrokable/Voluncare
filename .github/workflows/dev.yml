@@ -24,10 +24,8 @@ jobs:
       
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
       
-      - name: Clear Docker
-        run: docker system prune -af
       - name: Build Docker image
         uses: docker/build-push-action@v2
         with:
