@@ -23,23 +23,17 @@ jobs:
       REGISTRY_PASSWORD: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
       
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+      - uses: actions/checkout@v2
       
       - name: Clear Docker
         run: docker system prune -af
-#       - name: Setup .NET
-#         uses: actions/setup-dotnet@v3
-#         with:
-#           dotnet-versions: '6.0.x'
-      
-#       - name: Restore
-#         run: dotnet restore ${{ env.SOLUTION_PATH }}
-        
-#       - name: Build 
-#         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
-      
-#       - name: Publish 
-#         run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-build
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          file: ${{ env.DOCKER_FILE_PATH }}
 
       - name: 'Docker Login'
         uses: azure/docker-login@v1
