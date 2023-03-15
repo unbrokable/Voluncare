@@ -1,3 +1,5 @@
+import background from "../assets/background.jpg";
+
 const colorSchema = {
   greenMain: "#68A691",
   greenSecondary: "#BFD3C1",
@@ -7,19 +9,27 @@ const colorSchema = {
 };
 
 const styles = {
+  main: {
+    overflow: "hidden",
+    height: "100vh",
+    backgroundImage: `url(${background})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+  },
   button: {
     backgroundColor: colorSchema.greenMain,
   },
   header: {
-    backgroundColor: colorSchema.redMain,
-    height: "50px",
+    backgroundColor: colorSchema.greenSecondary,
+    height: "80px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0 1rem",
+    opacity: 0.9,
   },
   logo: {
-    height: "40px",
+    height: "80px",
   },
 };
 

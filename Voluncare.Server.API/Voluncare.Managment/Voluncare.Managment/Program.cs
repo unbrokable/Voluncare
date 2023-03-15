@@ -9,7 +9,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
 // Todo: for testing  
 //if (app.Environment.IsDevelopment())
 //{

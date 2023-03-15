@@ -16,5 +16,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Voluncare.Services\Voluncare.Services.csproj" />
   </ItemGroup>
-
 </Project>
