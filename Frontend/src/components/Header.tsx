@@ -1,7 +1,6 @@
 import { Button } from "@mui/material";
-import logo from "../assets/react.svg";
+import logo from "../assets/logo.svg";
 import styles from "../styles/MainStyles";
-import React from "react";
 
 function Header() {
   return (
