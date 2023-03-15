@@ -83,5 +83,5 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:
           app-name: 'voluncare-ui'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_UI_PUBLISH_PROFILE }}
           images: ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
