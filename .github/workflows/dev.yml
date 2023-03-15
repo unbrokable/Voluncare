@@ -1,0 +1,87 @@
+name: Publish services
+
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+    - dev
+    - github-actions
+  pull_request:
+    branches:
+    - dev
+    - github-actions
+
+# Todo: moved to secrets
+env:
+  REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
+  REGISTRY_USERNAME: voluncare
+  REGISTRY_PASSWORD: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
+
+jobs:
+  publish-api:
+    runs-on: ubuntu-latest
+    
+    env:
+      DOCKER_FILE_PATH: ./Voluncare.Server.API/Voluncare.Managment
+      SOLUTION_PATH: ./Voluncare.Server.API/Voluncare.Managment/Voluncare.Managment.sln
+      IMAGE_NAME: voluncare-api
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build Docker Image
+        run: docker build ${{ env.DOCKER_FILE_PATH }} -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest  
+        
+      - name: Tag Docker Image
+        run: docker tag ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        
+      - name: 'Docker Login'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+  
+      - name: Build and Push Docker Image
+        run: docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'voluncare-api'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+
+  publish-ui:
+    runs-on: ubuntu-latest
+    
+    env:
+      DOCKER_FILE_PATH: ./Frontend
+      IMAGE_NAME: voluncare-ui
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build Docker Image
+        run: docker build ${{ env.DOCKER_FILE_PATH }} -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest  
+        
+      - name: Tag Docker Image
+        run: docker tag ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        
+      - name: 'Docker Login'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+  
+      - name: Build and Push Docker Image
+        run: docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'voluncare-ui'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_UI_PUBLISH_PROFILE }}
+          images: ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}

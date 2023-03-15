@@ -7,14 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Voluncare.Managment/Voluncare.Managment.csproj", "Voluncare.Managment/"]
+COPY ["./Voluncare.Managment/Voluncare.Managment.csproj", "Voluncare.Managment/"]
+COPY ["./Voluncare.Services/Voluncare.Services.csproj", "Voluncare.Services/"]
+
 RUN dotnet restore "Voluncare.Managment/Voluncare.Managment.csproj"
+
 COPY . .
 WORKDIR "/src/Voluncare.Managment"
 RUN dotnet build "Voluncare.Managment.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Voluncare.Managment.csproj" -c Release -o /app/publish
+RUN dotnet publish "Voluncare.Managment.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

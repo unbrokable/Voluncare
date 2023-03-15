@@ -29,5 +29,11 @@ namespace Voluncare.Managment.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("/Test")]
+        public IActionResult GetTest()
+        {
+            return Ok();
+        }
     }
 }
