@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voluncare.Core", "Voluncare
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voluncare.Services", "Voluncare.Services\Voluncare.Services.csproj", "{8594583E-2AD3-435A-842C-EA012839E236}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voluncare.Infrastructure", "Voluncare.Infrastructure\Voluncare.Infrastructure.csproj", "{45B7A1AA-C557-4010-9807-F09F70D74E95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voluncare.Infrastructure", "Voluncare.Infrastructure\Voluncare.Infrastructure.csproj", "{45B7A1AA-C557-4010-9807-F09F70D74E95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voluncare.EntityFramework", "Voluncare.EntityFramework\Voluncare.EntityFramework.csproj", "{8E7E0CF6-29AA-4108-88A3-DF4FAF62BEEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{45B7A1AA-C557-4010-9807-F09F70D74E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45B7A1AA-C557-4010-9807-F09F70D74E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45B7A1AA-C557-4010-9807-F09F70D74E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7E0CF6-29AA-4108-88A3-DF4FAF62BEEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7E0CF6-29AA-4108-88A3-DF4FAF62BEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7E0CF6-29AA-4108-88A3-DF4FAF62BEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7E0CF6-29AA-4108-88A3-DF4FAF62BEEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
