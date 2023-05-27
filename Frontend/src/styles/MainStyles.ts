@@ -29,14 +29,6 @@ const styles = {
   logo: {
     height: "80px",
   },
-  homeTitle: {
-    color: colorSchema.greenSecondary,
-    fontSize: 34,
-    fontWeight: 600,
-    textAlign: "center",
-    marginTop: 300,
-    zIndex: 100,
-  },
 };
 
 export default styles;
