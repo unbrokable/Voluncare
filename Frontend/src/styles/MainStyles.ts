@@ -10,10 +10,8 @@ const colorSchema = {
 
 const styles = {
   main: {
-    overflow: "hidden",
     height: "100vh",
     backgroundImage: `url(${background})`,
-    backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
   },
   button: {
@@ -30,6 +28,14 @@ const styles = {
   },
   logo: {
     height: "80px",
+  },
+  homeTitle: {
+    color: colorSchema.greenSecondary,
+    fontSize: 34,
+    fontWeight: 600,
+    textAlign: "center",
+    marginTop: 300,
+    zIndex: 100,
   },
 };
 
