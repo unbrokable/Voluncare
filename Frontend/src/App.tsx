@@ -7,6 +7,8 @@ import styles from "./styles/MainStyles";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
+  const { VITE_API_URL_API } = import.meta.env;
+
   return (
     <div className="App" style={{ ...styles.main }}>
       <Header />
