@@ -1,12 +1,15 @@
-﻿using Voluncare.EntityFramework.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Voluncare.EntityFramework.Context;
 
 namespace Voluncare.Managment.BuilderExtensions
 {
     internal static class DbContextExtension
     {
-        internal static IServiceCollection AddDbContextExtensions(this IServiceCollection services)
+        internal static IServiceCollection AddDbContextExtensions(this IServiceCollection services, WebApplicationBuilder buelder)
         {
-            services.AddDbContext<VoluncareDbContext>();
+            services.AddDbContext<VoluncareDbContext>(
+                o => o.UseNpgsql(buelder.Configuration.GetConnectionString("VoluncareTest"))
+                );
 
             return services;
         }

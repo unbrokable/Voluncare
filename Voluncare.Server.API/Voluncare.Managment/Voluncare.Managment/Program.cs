@@ -1,4 +1,5 @@
 using Voluncare.Managment.BuilderExtensions;
+using Voluncare.Managment.MapperProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // DbContext
-builder.Services.AddDbContextExtensions();
+builder.Services.AddDbContextExtensions(builder);
+// Identity
+builder.Services.AddIdentityExtension(builder);
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(UserViewModelProfile));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -23,7 +28,7 @@ var app = builder.Build();
 //}
 // app.UseHttpsRedirection();
 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

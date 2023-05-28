@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Voluncare.Core.Interfaces
+namespace Voluncare.Core.Enums
 {
-    public interface IDbEntity
+    public enum ApllicationUserType
     {
-        public Guid Id { get; set; }
+        Volunteer,
+        User
     }
 }

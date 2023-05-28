@@ -18,7 +18,7 @@ namespace Voluncare.EntityFramework.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=my_host;Database=my_db;Username=my_user;Password=my_pw");
+            // optionsBuilder.UseNpgsql("Server=voluncare-db.postgres.database.azure.com;Database=ValuncareTest;Port=5432;User Id=voluncare;Password=Test123123;Ssl Mode=Require;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
