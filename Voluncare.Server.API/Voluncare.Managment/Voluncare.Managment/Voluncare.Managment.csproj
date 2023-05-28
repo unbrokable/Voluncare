@@ -25,5 +25,4 @@
     <ProjectReference Include="..\Voluncare.EntityFramework\Voluncare.EntityFramework.csproj" />
     <ProjectReference Include="..\Voluncare.Services\Voluncare.Services.csproj" />
   </ItemGroup>
-
 </Project>
