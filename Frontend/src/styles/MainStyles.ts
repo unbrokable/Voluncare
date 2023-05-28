@@ -10,10 +10,8 @@ const colorSchema = {
 
 const styles = {
   main: {
-    overflow: "hidden",
     height: "100vh",
     backgroundImage: `url(${background})`,
-    backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
   },
   button: {

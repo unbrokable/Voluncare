@@ -1,17 +1,22 @@
 import { Button } from "@mui/material";
 import logo from "../assets/logo.svg";
 import styles from "../styles/MainStyles";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
     <header style={{ ...styles.header }}>
-      <img src={logo} alt="Your Logo" style={{ ...styles.logo }} />
+      <Link to="/">
+        <img src={logo} alt="Your Logo" style={{ ...styles.logo }} />
+      </Link>
 
       <text>HELP UKRAINE</text>
 
-      <Button variant="contained" style={{ ...styles.button }}>
-        GET STARTED
-      </Button>
+      <Link to="/login">
+        <Button variant="contained" style={{ ...styles.button }}>
+          GET STARTED
+        </Button>
+      </Link>
     </header>
   );
 }
