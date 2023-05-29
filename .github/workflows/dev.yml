@@ -6,7 +6,7 @@ on:
     branches:
     - dev
     - github-actions
-    
+
 # Todo: moved to secrets
 env:
   REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
@@ -21,7 +21,7 @@ jobs:
           uses: actions/checkout@v2
   
   publish-api:
-    uses: ./.github/workflows/common/publish_to_azure_app.yml
+    uses: ./.github/workflows/publish_to_azure_app.yml
     with: 
       docker_file_path: ./Voluncare.Server.API/Voluncare.Managment
       docker_image_name: voluncare-api
