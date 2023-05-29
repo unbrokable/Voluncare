@@ -19,7 +19,7 @@ jobs:
     with: 
       docker_file_path: ./Voluncare.Server.API/Voluncare.Managment
       docker_image_name: voluncare-api
-      tag: 'develop-${GITHUB_RUN_NUMBER}'
+      tag: ${{ github.sha }}  #'develop-${GITHUB_RUN_NUMBER}'
     secrets: 
       registry_login_server: voluncare.azurecr.io
       registry_username: voluncare
@@ -31,7 +31,7 @@ jobs:
     with: 
       docker_file_path: ./Frontend
       docker_image_name: voluncare-ui
-      tag: 'develop-${GITHUB_RUN_NUMBER}'
+      tag: ${{ github.sha }} #'develop-${GITHUB_RUN_NUMBER}'
     secrets: 
       registry_login_server: voluncare.azurecr.io
       registry_username: voluncare
