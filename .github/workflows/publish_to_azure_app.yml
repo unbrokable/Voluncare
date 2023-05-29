@@ -17,7 +17,7 @@ on:
       registry_password:
         required: true
       azure_webapp_publish_profile:
-        # required: true
+        required: true
 
 jobs:
   publish-service:
@@ -45,6 +45,6 @@ jobs:
       
       - uses: azure/webapps-deploy@v2
         with:
-          app-name: '${{ inputs.docker_image_name }}'
+          app-name: 'voluncare-api'
           publish-profile: ${{ secrets.azure_webapp_publish_profile }}
           images: ${{ secrets.registry_login_server  }}/${{ inputs.docker_image_name }}:${{ github.sha }}
