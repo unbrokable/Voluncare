@@ -9,6 +9,9 @@ on:
       docker_image_name:
         required: true
         type: string
+      tag:
+        required: true
+        type: string
     secrets: 
       registry_login_server:
         required: true
@@ -31,7 +34,7 @@ jobs:
         run: docker build ${{ inputs.docker_file_path }} -t ${{ secrets.registry_login_server }}/${{ inputs.docker_image_name }}:latest  
         
       - name: Tag Docker Image
-        run: docker tag ${{ secrets.registry_login_server }}/${{ inputs.docker_image_name }}:latest ${{ secrets.registry_login_server }}/${{ inputs.docker_image_name }}:${{ github.sha }}
+        run: docker tag ${{ secrets.registry_login_server }}/${{ inputs.docker_image_name }}:latest ${{ secrets.registry_login_server }}/${{ inputs.docker_image_name }}:${{ inputs.tag }}
         
       - name: 'Docker Login'
         uses: azure/docker-login@v1
@@ -41,10 +44,10 @@ jobs:
           password: ${{ secrets.registry_password }}
   
       - name: Build and Push Docker Image
-        run: docker push ${{ secrets.registry_login_server }}/${{ inputs.docker_image_name }}:${{ github.sha }}
+        run: docker push ${{ secrets.registry_login_server }}/${{ inputs.docker_image_name }}:${{ inputs.tag }}
       
       - uses: azure/webapps-deploy@v2
         with:
           app-name: '${{ inputs.docker_image_name }}'
           publish-profile: ${{ secrets.azure_webapp_publish_profile }}
-          images: ${{ secrets.registry_login_server  }}/${{ inputs.docker_image_name }}:${{ github.sha }}
+          images: ${{ secrets.registry_login_server  }}/${{ inputs.docker_image_name }}:${{ inputs.tag }}
