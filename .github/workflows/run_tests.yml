@@ -1,0 +1,43 @@
+name: Run services tests
+
+on: 
+  workflow_dispatch:
+  pull_request:
+    branches:
+    - dev
+    - github-actions
+
+env:
+  REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
+  REGISTRY_USERNAME: voluncare
+  REGISTRY_PASSWORD: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
+
+jobs:
+  publish-api:
+    runs-on: ubuntu-latest
+    
+    env:
+      DOCKER_FILE_PATH: ./Voluncare.Server.API/Voluncare.Managment
+      SOLUTION_PATH: ./Voluncare.Server.API/Voluncare.Managment/Voluncare.Managment.sln
+      IMAGE_NAME: voluncare-api
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build Docker Image
+        run: docker build ${{ env.DOCKER_FILE_PATH }} -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest  
+
+  publish-ui:
+    runs-on: ubuntu-latest
+    
+    env:
+      DOCKER_FILE_PATH: ./Frontend
+      IMAGE_NAME: voluncare-ui
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build Docker Image
+        run: docker build ${{ env.DOCKER_FILE_PATH }} -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest  
