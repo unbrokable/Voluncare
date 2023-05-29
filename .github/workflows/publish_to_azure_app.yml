@@ -45,6 +45,6 @@ jobs:
       
       - uses: azure/webapps-deploy@v2
         with:
-          app-name: 'voluncare-api'
+          app-name: '${{ inputs.docker_image_name }}'
           publish-profile: ${{ secrets.azure_webapp_publish_profile }}
           images: ${{ secrets.registry_login_server  }}/${{ inputs.docker_image_name }}:${{ github.sha }}

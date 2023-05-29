@@ -29,7 +29,7 @@ jobs:
       registry_login_server: voluncare.azurecr.io
       registry_username: voluncare
       registry_password: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
-      azure_webapp_publish_profile: ${{ secrets.AZURE_WEBAPP_UI_PUBLISH_PROFILE }}
+      azure_webapp_publish_profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
 
   # publish-api:
