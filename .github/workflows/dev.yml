@@ -25,13 +25,13 @@ jobs:
       registry_username: voluncare
       registry_password: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
       azure_webapp_publish_profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-      tag: ${GITHUB_RUN_NUMBER}
 
   publish-ui:
     uses: ./.github/workflows/publish_to_azure_app.yml
     with: 
       docker_file_path: ./Frontendt
       docker_image_name: voluncare-ui
+      tag: ${GITHUB_RUN_NUMBER}
     secrets: 
       registry_login_server: voluncare.azurecr.io
       registry_username: voluncare
