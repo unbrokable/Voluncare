@@ -26,9 +26,9 @@ jobs:
       docker_file_path: ./Voluncare.Server.API/Voluncare.Managment
       docker_image_name: voluncare-api
     secrets: 
-      registry_login_server: ${{ env.REGISTRY_LOGIN_SERVER }}
-      registry_username: ${{ env.REGISTRY_USERNAME }}
-      registry_password: ${{ env.REGISTRY_PASSWORD }}
+      registry_login_server: voluncare.azurecr.io
+      registry_username: voluncare
+      registry_password: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
       azure_webapp_publish_profile: ${{ secrets.AZURE_WEBAPP_UI_PUBLISH_PROFILE }}
 
 
