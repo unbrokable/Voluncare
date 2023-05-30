@@ -1,8 +1,8 @@
 ﻿using Voluncare.Core.Enums;
 
-namespace Voluncare.Managment.ViewModels
+namespace Voluncare.Managment.ViewModels.User
 {
-    public class UserViewModel
+    public class RegisterUserViewModel
     {
         public ApllicationUserType ApllicationUserType { get; set; }
 

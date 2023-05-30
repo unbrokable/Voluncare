@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Voluncare.Core.Entities;
-using Voluncare.Managment.ViewModels;
+using Voluncare.Managment.ViewModels.User;
 
 namespace Voluncare.Managment.MapperProfiles
 {
@@ -8,7 +8,7 @@ namespace Voluncare.Managment.MapperProfiles
     {
         public UserViewModelProfile()
         {
-            CreateMap<UserViewModel, ApplicationUser>().ReverseMap();
+            CreateMap<RegisterUserViewModel, ApplicationUser>().ReverseMap();
         }
     }
 }

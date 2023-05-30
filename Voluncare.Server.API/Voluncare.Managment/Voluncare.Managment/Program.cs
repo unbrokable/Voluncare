@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Voluncare.Managment.BuilderExtensions;
 using Voluncare.Managment.MapperProfiles;
 
@@ -8,11 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // DbContext
-builder.Services.AddDbContextExtensions(builder);
-// Identity
-builder.Services.AddIdentityExtension(builder);
+builder.Services.AddDbContextExtension(builder);
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(UserViewModelProfile));
+// CORS
+builder.Services.AddCorsExtension(builder);
+// Cookie
+builder.Services.AddCookieConfigurationExtension(builder);
+// Identity
+builder.Services.AddIdentityExtension(builder);
+// Authentication JWT
+builder.Services.AddAuthenticationExtension(builder);
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -26,7 +36,8 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
