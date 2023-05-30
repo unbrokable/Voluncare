@@ -2,35 +2,43 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Text;
 using Voluncare.Core.Entities;
+using Voluncare.Managment.Helpers;
 using Voluncare.Managment.ViewModels;
+using Voluncare.Managment.ViewModels.User;
 
 namespace Voluncare.Managment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class UserController
+    public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IMapper mapper;
+        private readonly IConfiguration configuration;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IMapper mapper
+            IMapper mapper,
+            IConfiguration configuration
             )
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.mapper = mapper;
+            this.configuration = configuration;
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserViewModel user)
+        public async Task<IActionResult> Register([FromBody] RegisterUserViewModel user)
         {
             var appUser = this.mapper.Map<ApplicationUser>(user);
 
@@ -38,19 +46,21 @@ namespace Voluncare.Managment.Controllers
 
             if (!result.Succeeded)
             {
-                return new JsonResult(user) { StatusCode = (int)HttpStatusCode.BadRequest };
+                return BadRequest(user);
             }
-            else
-            {
-                await this.signInManager.SignInAsync(appUser, false);
 
-                return new JsonResult(user) { StatusCode = (int)HttpStatusCode.OK };
-            }
+            var token = JwtHelper.GetJwtToken(this.configuration);
+
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo
+            });
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserViewModel user)
+        public async Task<IActionResult> Login([FromBody] LoginUserViewModel user)
         {
             var dbUser = await this.userManager.FindByNameAsync(user.UserName);
 
@@ -58,14 +68,25 @@ namespace Voluncare.Managment.Controllers
 
             if (dbUser == null || passwordVerification != PasswordVerificationResult.Success)
             {
-                return new JsonResult(user) { StatusCode = (int)HttpStatusCode.BadRequest };
+                return BadRequest(user);
             }
 
-            await this.signInManager.SignInAsync(dbUser, false);
+            var token = JwtHelper.GetJwtToken(this.configuration);
 
-            // HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "set-cookie");
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo
+            });
+        }
 
-            return new JsonResult(dbUser) { StatusCode = (int)HttpStatusCode.OK };
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await this.signInManager.SignOutAsync();
+
+            return Ok();
         }
     }
 }
