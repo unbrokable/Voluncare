@@ -1,0 +1,53 @@
+name: Run services tests
+
+on: 
+  workflow_call:
+
+env:
+  REGISTRY_LOGIN_SERVER: voluncare.azurecr.io
+  REGISTRY_USERNAME: voluncare
+  REGISTRY_PASSWORD: ps6bysqP8uzX2rznSxuyKyec1GXzQnbq4SD9Focp7e+ACRBmTVwZ
+
+jobs:
+  tests-api:
+    runs-on: ubuntu-latest
+    
+    env:
+      DOCKER_FILE_PATH: ./Voluncare.Server.API/Voluncare.Managment
+      SOLUTION_PATH: ./Voluncare.Server.API/Voluncare.Managment/Voluncare.Managment.sln
+      IMAGE_NAME: voluncare-api
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.0'
+
+      - name: Restore NuGet packages
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release
+
+      - name: Run Tests
+        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release
+
+      - name: Build Docker Image
+        run: docker build ${{ env.DOCKER_FILE_PATH }} -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest  
+
+  tests-ui:
+    runs-on: ubuntu-latest
+    
+    env:
+      DOCKER_FILE_PATH: ./Frontend
+      IMAGE_NAME: voluncare-ui
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build Docker Image
+        run: docker build ${{ env.DOCKER_FILE_PATH }} -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest  
