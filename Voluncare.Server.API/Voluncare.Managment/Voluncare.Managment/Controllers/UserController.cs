@@ -58,7 +58,8 @@ namespace Voluncare.Managment.Controllers
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                expiration = token.ValidTo,
+                user = result
             });
         }
 
@@ -80,7 +81,8 @@ namespace Voluncare.Managment.Controllers
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                expiration = token.ValidTo,
+                user = dbUser
             });
         }
 
