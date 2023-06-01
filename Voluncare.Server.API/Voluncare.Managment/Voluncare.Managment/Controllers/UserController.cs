@@ -44,39 +44,31 @@ namespace Voluncare.Managment.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserViewModel user)
         {
-            var appUser = this.mapper.Map<ApplicationUser>(user);
+            ApplicationUser dbUser = null;
+            JwtSecurityToken token = null;
 
-            var result = await this.userManager.CreateAsync(appUser, user.Password);
-
-            if (!result.Succeeded)
+            try
             {
-                return BadRequest(user);
+                var appUser = this.mapper.Map<ApplicationUser>(user);
+
+                var result = await this.userManager.CreateAsync(appUser, user.Password);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest(user);
+                }
+
+                dbUser = await this.userManager.FindByNameAsync(user.UserName);
+
+                token = JwtHelper.GetJwtToken(this.configuration);
             }
-
-            var token = JwtHelper.GetJwtToken(this.configuration);
-
-            return Ok(new
+            catch (Exception ex)
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo,
-                user = result
-            });
-        }
-
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserViewModel user)
-        {
-            var dbUser = await this.userManager.FindByNameAsync(user.UserName);
-
-            var passwordVerification = this.userManager.PasswordHasher.VerifyHashedPassword(dbUser, dbUser.PasswordHash, user.Password);
-
-            if (dbUser == null || passwordVerification != PasswordVerificationResult.Success)
-            {
-                return BadRequest(user);
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
             }
-
-            var token = JwtHelper.GetJwtToken(this.configuration);
 
             return Ok(new
             {
@@ -87,12 +79,74 @@ namespace Voluncare.Managment.Controllers
         }
 
         [HttpPost]
-        [Route("logout")]
-        public async Task<IActionResult> Logout()
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserViewModel user)
         {
-            await this.signInManager.SignOutAsync();
+            ApplicationUser dbUser = null;
+            JwtSecurityToken token = null;
 
-            return Ok();
+            try
+            {
+                dbUser = await this.userManager.FindByNameAsync(user.UserName);
+
+                var passwordVerification = this.userManager.PasswordHasher.VerifyHashedPassword(dbUser, dbUser.PasswordHash, user.Password);
+
+                if (dbUser == null || passwordVerification != PasswordVerificationResult.Success)
+                {
+                    return BadRequest(user);
+                }
+
+                token = JwtHelper.GetJwtToken(this.configuration);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo,
+                user = dbUser
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("update")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserViewModel user)
+        {
+            ApplicationUser dbUser = null;
+
+            try
+            {
+                dbUser = await this.userManager.FindByIdAsync(user.Id.ToString());
+
+                dbUser = this.mapper.Map(user, dbUser);
+
+                var result = await this.userManager.UpdateAsync(dbUser);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest(user);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+
+            return Ok(new
+            {
+                user = dbUser
+            });
         }
     }
 }
