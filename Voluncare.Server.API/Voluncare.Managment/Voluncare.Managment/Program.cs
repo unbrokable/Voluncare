@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Voluncare.Core.Interfaces;
+using Voluncare.Infrastructure.UnitOfWork;
 using Voluncare.Managment.BuilderExtensions;
 using Voluncare.Managment.MapperProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 

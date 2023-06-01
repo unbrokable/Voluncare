@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text;
 using Voluncare.Core.Entities;
+using Voluncare.Core.Interfaces;
 using Voluncare.Managment.Helpers;
 using Voluncare.Managment.ViewModels;
 using Voluncare.Managment.ViewModels.User;
@@ -22,18 +23,21 @@ namespace Voluncare.Managment.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
+        private readonly IUnitOfWork unitOfWork;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IMapper mapper,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IUnitOfWork unitOfWork
             )
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.mapper = mapper;
             this.configuration = configuration;
+            this.unitOfWork = unitOfWork;
         }
 
         [HttpPost]
