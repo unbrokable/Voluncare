@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Net;
 using System.Text;
 using Voluncare.Core.Entities;
@@ -146,6 +149,40 @@ namespace Voluncare.Managment.Controllers
             return Ok(new
             {
                 user = dbUser
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("uploadImage")]
+        public async Task<IActionResult> UploadImage (IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("File is not selected");
+            }
+
+            string connectionString = this.configuration["BlobConnectionString"];
+
+            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+
+            string containerName = this.configuration["BlobContainerName"];
+
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+            var fileName = String.Concat(Guid.NewGuid().ToString(), file.FileName);
+
+            BlobClient blobClient = containerClient.GetBlobClient(fileName);
+            BlobContentInfo result;
+
+            using (var stream = file.OpenReadStream())
+            {
+                result = await blobClient.UploadAsync(stream, true);
+            }
+
+            return Ok(new
+            {
+                imageUrl = String.Concat("https://voluncarestorage.blob.core.windows.net/userimages/", fileName)
             });
         }
     }
