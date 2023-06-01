@@ -9,6 +9,8 @@ namespace Voluncare.Managment.MapperProfiles
         public UserViewModelProfile()
         {
             CreateMap<RegisterUserViewModel, ApplicationUser>().ReverseMap();
+
+            CreateMap<UpdateUserViewModel, ApplicationUser>().ReverseMap();
         }
     }
 }
