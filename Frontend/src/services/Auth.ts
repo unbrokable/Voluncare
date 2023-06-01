@@ -1,9 +1,38 @@
 import { api } from "../api/api";
 
-const Login = ({ email, password }: { email: string; password: string }) => {
+export const login = ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
   return api.post(
-    "tut endpoint",
-    { email: email, password: password },
-    { headers: { bubu: "bubu" } }
+    "User/login",
+    { userName: username, password: password },
+    { headers: { "Content-Type": "application/json" } }
+  );
+};
+
+export const registration = ({
+  email,
+  password,
+  role,
+  username,
+}: {
+  email: string;
+  password: string;
+  role: number;
+  username: string;
+}) => {
+  return api.post(
+    "User/register",
+    {
+      email: email,
+      password: password,
+      apllicationUserType: role,
+      userName: username,
+    },
+    { headers: { "Content-Type": "application/json" } }
   );
 };
