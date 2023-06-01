@@ -15,6 +15,8 @@ namespace Voluncare.EntityFramework.ContextConfigurations
         {
             builder.ToTable("Users");
 
+            builder.Property<string>(prop => prop.AvatarImage).IsRequired(false);
+
             builder.HasKey(x => x.Id)
                 .IsClustered();
         }

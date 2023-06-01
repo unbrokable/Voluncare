@@ -13,7 +13,7 @@ namespace Voluncare.Core.Entities
     {
         public ApllicationUserType ApllicationUserType { get; set; }
 
-        public string AvatarImage { get; set; }
+        public string? AvatarImage { get; set; }
 
         public List<Chat> Chats { get; set; }
 
