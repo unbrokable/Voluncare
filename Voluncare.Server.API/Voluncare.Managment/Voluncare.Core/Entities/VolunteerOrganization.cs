@@ -1,19 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Voluncare.Core.Enums;
 using Voluncare.Core.Interfaces;
 
 namespace Voluncare.Core.Entities
 {
-    public class ApplicationUser : IdentityUser<Guid>, IDbEntity
+    public class VolunteerOrganization : IDbEntity
     {
-        public ApllicationUserType ApllicationUserType { get; set; }
+        public Guid Id { get; set; }
 
-        public string AvatarImage { get; set; }
+        public Guid FounderId { get; set; }
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string BackgroundImage { get; set; }
+
+        public ApplicationUser Founder { get; set; }
 
         public List<Chat> Chats { get; set; }
 
@@ -21,9 +27,9 @@ namespace Voluncare.Core.Entities
 
         public List<Staff> Staffs { get; set; }
 
-        public List<VolunteerOrganization> OwnedOrganizations { get; set; }
-
         public List<Estimate> Estimates { get; set; }
+
+        public List<OrganizationContact> OrganizationContacts { get; set; }
 
         public List<Comment> Comments { get; set; }
     }
