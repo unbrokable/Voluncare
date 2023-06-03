@@ -7,6 +7,7 @@ import Registration from "./components/Registration";
 import styles from "./styles/MainStyles";
 import { Route, Routes } from "react-router-dom";
 import VolunteerMain from "./components/Volunteer/VolunteerMain";
+import EditProfile from "./components/EditProfile";
 
 function App() {
   const { VITE_API_URL_API } = import.meta.env;
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/profile" element={<EditProfile />} />
           {/* add dependency on role */}
           <Route path="/main" element={<VolunteerMain />} />
         </Routes>

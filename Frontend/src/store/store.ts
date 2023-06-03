@@ -7,5 +7,12 @@ export const tokenState = atom({
 
 export const userState = atom({
   key: "user", // unique ID (with respect to other atoms/selectors)
-  default: {}, // default value (aka initial value)
+  default: {
+    id: "",
+    userName: "",
+    email: "",
+    apllicationUserType: 0,
+    avatarImage: "",
+    phoneNumber: ""
+  }, // default value (aka initial value)
 });
