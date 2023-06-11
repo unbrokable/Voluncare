@@ -26,6 +26,11 @@ namespace Voluncare.EntityFramework.ContextConfigurations
                 .WithMany(p => p.HelpRequests)
                 .HasForeignKey(pt => pt.TakenOrganizationId)
                 .IsRequired(false);
+
+            builder.HasOne(x => x.Organization)
+                .WithMany(p => p.HelpRequests)
+                .HasForeignKey(pt => pt.TakenVolunteerId)
+                .IsRequired(false);
         }
     }
 }
