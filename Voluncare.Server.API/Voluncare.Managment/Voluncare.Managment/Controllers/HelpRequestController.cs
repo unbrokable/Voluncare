@@ -52,10 +52,12 @@ namespace Voluncare.Managment.Controllers
         public async Task<ActionResult<ListResponseViewModel>> GetHelpRequestWithPagination([FromBody] GetWithPaginationViewModel viewModel)
         {
             List<ListResponseViewModel> response;
+            int? totalCount = 0;
 
             try
             {
-                var result = await this.unitOfWork.HelpRequestRepository.GetAsync(viewModel.Page, viewModel.Count);
+                var result = await this.unitOfWork.HelpRequestRepository.GetListWithIncludeAsync(viewModel.Page, viewModel.Count, default, include => include.User);
+                totalCount = (await GetTotalCount())?.Value;
 
                 response = this.mapper.Map<List<ListResponseViewModel>>(result);
             }
@@ -64,7 +66,7 @@ namespace Voluncare.Managment.Controllers
                 return BadRequest(new { error = ex.Message });
             }
 
-            return Ok(new { list = response });
+            return Ok(new { list = response, count = totalCount });
         }
 
         [Route("assingVolunteer")]
@@ -89,6 +91,23 @@ namespace Voluncare.Managment.Controllers
             }
 
             return Ok();
+        }
+
+        [Route("totalCount")]
+        [HttpGet]
+        public async Task<ActionResult<int>> GetTotalCount()
+        {
+            int result = 0;
+            try
+            {
+                result = await this.unitOfWork.HelpRequestRepository.CountAsync(new Specification<HelpRequest>(req => req == req));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex });
+            }
+
+            return Ok(result);
         }
     }
 }
