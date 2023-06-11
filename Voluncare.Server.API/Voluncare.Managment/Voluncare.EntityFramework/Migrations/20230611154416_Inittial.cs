@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Voluncare.EntityFramework.Migrations
 {
-    public partial class initial : Migration
+    public partial class Inittial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,7 @@ namespace Voluncare.EntityFramework.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ApllicationUserType = table.Column<int>(type: "integer", nullable: false),
-                    AvatarImage = table.Column<string>(type: "text", nullable: false),
+                    AvatarImage = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -261,8 +261,8 @@ namespace Voluncare.EntityFramework.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TakenOrganizationId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TakenVolunteerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TakenOrganizationId = table.Column<Guid>(type: "uuid", nullable: true),
+                    TakenVolunteerId = table.Column<Guid>(type: "uuid", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
@@ -274,6 +274,11 @@ namespace Voluncare.EntityFramework.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HelpRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HelpRequests_Users_TakenVolunteerId",
+                        column: x => x.TakenVolunteerId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_HelpRequests_Users_UserId",
                         column: x => x.UserId,
@@ -414,6 +419,11 @@ namespace Voluncare.EntityFramework.Migrations
                 name: "IX_HelpRequests_TakenOrganizationId",
                 table: "HelpRequests",
                 column: "TakenOrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HelpRequests_TakenVolunteerId",
+                table: "HelpRequests",
+                column: "TakenVolunteerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HelpRequests_UserId",

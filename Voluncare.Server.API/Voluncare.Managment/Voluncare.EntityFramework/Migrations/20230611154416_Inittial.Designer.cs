@@ -12,8 +12,8 @@ using Voluncare.EntityFramework.Context;
 namespace Voluncare.EntityFramework.Migrations
 {
     [DbContext(typeof(VoluncareDbContext))]
-    [Migration("20230611125147_changes_dependencies")]
-    partial class changes_dependencies
+    [Migration("20230611154416_Inittial")]
+    partial class Inittial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -351,6 +351,8 @@ namespace Voluncare.EntityFramework.Migrations
                     b.HasKey("Id")
                         .HasAnnotation("SqlServer:Clustered", true);
 
+                    b.HasIndex("TakenOrganizationId");
+
                     b.HasIndex("TakenVolunteerId");
 
                     b.HasIndex("UserId");
@@ -570,6 +572,10 @@ namespace Voluncare.EntityFramework.Migrations
                 {
                     b.HasOne("Voluncare.Core.Entities.VolunteerOrganization", "Organization")
                         .WithMany("HelpRequests")
+                        .HasForeignKey("TakenOrganizationId");
+
+                    b.HasOne("Voluncare.Core.Entities.ApplicationUser", "Volunteer")
+                        .WithMany("TakenHelpRequest")
                         .HasForeignKey("TakenVolunteerId");
 
                     b.HasOne("Voluncare.Core.Entities.ApplicationUser", "User")
@@ -581,6 +587,8 @@ namespace Voluncare.EntityFramework.Migrations
                     b.Navigation("Organization");
 
                     b.Navigation("User");
+
+                    b.Navigation("Volunteer");
                 });
 
             modelBuilder.Entity("Voluncare.Core.Entities.Message", b =>
@@ -648,6 +656,8 @@ namespace Voluncare.EntityFramework.Migrations
                     b.Navigation("OwnedOrganizations");
 
                     b.Navigation("Staffs");
+
+                    b.Navigation("TakenHelpRequest");
                 });
 
             modelBuilder.Entity("Voluncare.Core.Entities.Chat", b =>

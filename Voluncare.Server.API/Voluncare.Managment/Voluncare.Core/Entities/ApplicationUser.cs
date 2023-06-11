@@ -19,6 +19,8 @@ namespace Voluncare.Core.Entities
 
         public List<HelpRequest> HelpRequests { get; set; }
 
+        public List<HelpRequest> TakenHelpRequest { get; set; }
+
         public List<Staff> Staffs { get; set; }
 
         public List<VolunteerOrganization> OwnedOrganizations { get; set; }

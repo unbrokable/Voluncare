@@ -71,6 +71,29 @@ namespace Voluncare.Managment.Controllers
             return Ok(new { list = response, count = totalCount });
         }
 
+        [HttpPost]
+        [Route("getUnassignedList")]
+        public async Task<ActionResult<ListResponseViewModel>> GetUnassignedHelpRequestsWithPagination([FromBody] GetWithPaginationViewModel viewModel)
+        {
+            IEnumerable<ListResponseViewModel> response;
+            int? totalCount = 0;
+
+            try
+            {
+                var result = await this.unitOfWork.HelpRequestRepository.GetListWithIncludeAsync(new Specification<HelpRequest>(hr => hr.TakenVolunteerId == null)
+                    , viewModel.Page, viewModel.Count, default, include => include.User);
+                totalCount = await this.unitOfWork.HelpRequestRepository.CountAsync(new Specification<HelpRequest>(hr => hr.TakenVolunteerId == null));
+
+                response = this.mapper.Map<IEnumerable<ListResponseViewModel>>(result.Items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+            return Ok(new { list = response, count = totalCount });
+        }
+
         [Route("assingVolunteer")]
         [HttpPost]
         public async Task<IActionResult> AssignVolunteer([FromBody] TakeRequestViewModel viewModel)

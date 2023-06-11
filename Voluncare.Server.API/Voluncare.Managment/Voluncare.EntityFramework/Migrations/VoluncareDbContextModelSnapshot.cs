@@ -353,6 +353,8 @@ namespace Voluncare.EntityFramework.Migrations
 
                     b.HasIndex("TakenVolunteerId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("HelpRequests", (string)null);
                 });
 
@@ -570,13 +572,21 @@ namespace Voluncare.EntityFramework.Migrations
                         .WithMany("HelpRequests")
                         .HasForeignKey("TakenOrganizationId");
 
+                    b.HasOne("Voluncare.Core.Entities.ApplicationUser", "Volunteer")
+                        .WithMany("TakenHelpRequest")
+                        .HasForeignKey("TakenVolunteerId");
+
                     b.HasOne("Voluncare.Core.Entities.ApplicationUser", "User")
                         .WithMany("HelpRequests")
-                        .HasForeignKey("TakenVolunteerId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Organization");
 
                     b.Navigation("User");
+
+                    b.Navigation("Volunteer");
                 });
 
             modelBuilder.Entity("Voluncare.Core.Entities.Message", b =>
@@ -644,6 +654,8 @@ namespace Voluncare.EntityFramework.Migrations
                     b.Navigation("OwnedOrganizations");
 
                     b.Navigation("Staffs");
+
+                    b.Navigation("TakenHelpRequest");
                 });
 
             modelBuilder.Entity("Voluncare.Core.Entities.Chat", b =>
