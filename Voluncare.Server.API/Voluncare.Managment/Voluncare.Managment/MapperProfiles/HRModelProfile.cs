@@ -12,9 +12,10 @@ namespace Voluncare.Managment.MapperProfiles
 
             CreateMap<TakeRequestViewModel, HelpRequest>().ReverseMap();
 
-            CreateMap<ListResponseViewModel, HelpRequest>().ReverseMap();
+            CreateMap<ListResponseViewModel, HelpRequest>().ReverseMap()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
-            CreateMap<List<ListResponseViewModel>, List<HelpRequest>>().ReverseMap();
+            //CreateMap<List<ListResponseViewModel>, List<HelpRequest>>().ReverseMap();
         }
     }
 }

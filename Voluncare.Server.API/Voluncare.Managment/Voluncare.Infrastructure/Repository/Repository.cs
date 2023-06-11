@@ -78,6 +78,12 @@ namespace Voluncare.Infrastructure.Repository
             return await query.Where(specification.Expression).FirstOrDefaultAsync();
         }
 
+        public async Task<ItemPage<TEntity>> GetListWithIncludeAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var query = Include(includeProperties);
+            return await query.Where(entity => entity == entity).ToPagedListAsync(pageNumber, pageSize, cancellationToken);
+        }
+
         public async Task<ItemPage<TEntity>> GetListWithIncludeAsync(Specification<TEntity> specification, int pageNumber, int pageSize, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var query = Include(includeProperties);
@@ -111,6 +117,11 @@ namespace Voluncare.Infrastructure.Repository
         {
             this.entities.UpdateRange(entity);
             await Task.CompletedTask;
+        }
+
+        public async Task<int> CountAsync(Specification<TEntity> specification)
+        {
+            return await this.entities.CountAsync(specification.Expression);
         }
     }
 }

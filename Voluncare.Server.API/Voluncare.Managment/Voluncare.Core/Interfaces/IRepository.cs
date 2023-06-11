@@ -34,6 +34,8 @@ namespace Voluncare.Core.Interfaces
 
         Task RemoveAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken = default);
 
+        Task<ItemPage<TEntity>> GetListWithIncludeAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties);
+
         Task<IEnumerable<TEntity>> GetWithIncludeAsync(params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task<TEntity> GetWithIncludeAsync(Specification<TEntity> specification, params Expression<Func<TEntity, object>>[] includeProperties);
@@ -41,5 +43,7 @@ namespace Voluncare.Core.Interfaces
         Task<ItemPage<TEntity>> GetListWithIncludeAsync(Specification<TEntity> specification, int pageNumber, int pageSize, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task SaveChanges();
+
+        Task<int> CountAsync(Specification<TEntity> specification);
     }
 }
