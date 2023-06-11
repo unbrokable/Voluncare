@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Voluncare.Core.Entities;
 using Voluncare.Core.Interfaces;
+using Voluncare.Core.Specification;
 using Voluncare.Managment.ViewModels.HelpRequest;
 
 namespace Voluncare.Managment.Controllers
@@ -30,7 +31,13 @@ namespace Voluncare.Managment.Controllers
 
             try
             {
+                model.CreateDate = DateTime.Now;
+                model.Id = Guid.NewGuid();
+                model.Status = Core.Enums.HelpRequestStatus.Draft;
+
                 await this.unitOfWork.HelpRequestRepository.AddAsync(model);
+
+                await this.unitOfWork.Save();
             }
             catch (Exception ex)
             {
@@ -58,6 +65,30 @@ namespace Voluncare.Managment.Controllers
             }
 
             return Ok(new { list = response });
+        }
+
+        [Route("assingVolunteer")]
+        [HttpPost]
+        public async Task<IActionResult> AssignVolunteer([FromBody] TakeRequestViewModel viewModel)
+        {
+            try
+            {
+                var hrModel = await this.unitOfWork.HelpRequestRepository.GetEntityAsync(new Specification<HelpRequest>(hr => hr.Id == viewModel.Id));
+
+                hrModel.TakenVolunteerId = viewModel.TakenVolunteerId;
+                hrModel.Status = Core.Enums.HelpRequestStatus.InProgress;
+                hrModel.TakenDate = DateTime.Now;
+
+                await this.unitOfWork.HelpRequestRepository.UpdateAsync(hrModel);
+
+                await this.unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+            return Ok();
         }
     }
 }
