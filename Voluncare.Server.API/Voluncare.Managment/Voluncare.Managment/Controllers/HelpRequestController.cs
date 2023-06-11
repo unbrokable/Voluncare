@@ -42,7 +42,7 @@ namespace Voluncare.Managment.Controllers
 
         [Route("getList")]
         [HttpPost]
-        public async Task<IActionResult> GetHelpRequestWithPagination([FromBody] GetWithPaginationViewModel viewModel)
+        public async Task<ActionResult<ListResponseViewModel>> GetHelpRequestWithPagination([FromBody] GetWithPaginationViewModel viewModel)
         {
             List<ListResponseViewModel> response;
 
