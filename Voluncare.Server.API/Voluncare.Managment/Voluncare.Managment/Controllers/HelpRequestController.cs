@@ -73,7 +73,7 @@ namespace Voluncare.Managment.Controllers
         {
             try
             {
-                var hrModel = await this.unitOfWork.HelpRequestRepository.GetEntityAsync(new Specification<HelpRequest>(hr => hr.Id == viewModel.Id));
+                var hrModel = await this.unitOfWork.HelpRequestRepository.GetEntityAsync(new Specification<HelpRequest>(hr => hr.Id == viewModel.RequestId));
 
                 hrModel.TakenVolunteerId = viewModel.TakenVolunteerId;
                 hrModel.Status = Core.Enums.HelpRequestStatus.InProgress;
