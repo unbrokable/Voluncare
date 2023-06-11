@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Voluncare.Core.Entities;
+using Voluncare.Core.Interfaces;
+using Voluncare.Core.Specification;
 
 namespace Voluncare.Managment.Controllers
 {
@@ -8,12 +11,20 @@ namespace Voluncare.Managment.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        [HttpPost]
-        [Authorize]
-        [Route("test")]
-        public IActionResult Test123()
+        private readonly IUnitOfWork unitOfWork;
+
+        public ValuesController(IUnitOfWork unitOfWork)
         {
-            return Ok(new { ok = "ok" });
+            this.unitOfWork = unitOfWork;
+        }
+
+        [HttpPost]
+        [Route("test")]
+        public IActionResult TestGetAllAppUsers()
+        {
+            var result = this.unitOfWork.UserRepository.GetAsync(new Specification<ApplicationUser>(user => user == user));
+
+            return Ok(new { users = result });
         }
     }
 }

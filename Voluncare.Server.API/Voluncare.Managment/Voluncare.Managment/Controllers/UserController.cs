@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net;
+using System.Net.Mail;
 using System.Text;
 using Voluncare.Core.Entities;
 using Voluncare.Core.Interfaces;
@@ -185,5 +186,40 @@ namespace Voluncare.Managment.Controllers
                 imageUrl = String.Concat("https://voluncarestorage.blob.core.windows.net/userimages/", fileName)
             });
         }
+
+        //private static void SendEmail(string toEmail, FunctionContext context)
+        //{
+        //    var config = context.GetConfig();
+
+        //    string fromEmail = config["FromEmail"];
+        //    string fromPassword = config["FromPassword"];
+        //    string smtpHost = config["SmtpHost"];
+        //    int smtpPort = int.Parse(config["SmtpPort"]);
+
+        //    using MailMessage mail = new MailMessage
+        //    {
+        //        From = new MailAddress(fromEmail),
+        //        Subject = "Custom time email notification",
+        //        Body = $"This is your custom time email notification, {toEmail}.",
+        //        IsBodyHtml = false
+        //    };
+
+        //    mail.To.Add(toEmail);
+
+        //    using SmtpClient smtpClient = new SmtpClient(smtpHost, smtpPort)
+        //    {
+        //        Credentials = new NetworkCredential(fromEmail, fromPassword),
+        //        EnableSsl = true
+        //    };
+
+        //    try
+        //    {
+        //        smtpClient.Send(mail);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        context.GetLogger("SendEmail").LogError($"Error sending email to {toEmail}: {ex.Message}");
+        //    }
+        //}
     }
 }
