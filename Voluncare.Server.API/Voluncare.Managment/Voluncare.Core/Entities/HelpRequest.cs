@@ -32,6 +32,8 @@ namespace Voluncare.Core.Entities
 
         public ApplicationUser User { get; set; }
 
+        public ApplicationUser Volunteer { get; set; }
+
         public VolunteerOrganization? Organization { get; set; }
     }
 }
