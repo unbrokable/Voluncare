@@ -31,8 +31,10 @@ namespace Voluncare.Managment.Controllers
 
             try
             {
-                model.CreateDate = DateTime.Now;
+                model.CreateDate = DateTime.UtcNow;
                 model.Id = Guid.NewGuid();
+                model.TakenVolunteerId = null;
+                model.TakenOrganizationId = null;
                 model.Status = Core.Enums.HelpRequestStatus.Draft;
 
                 await this.unitOfWork.HelpRequestRepository.AddAsync(model);
@@ -51,15 +53,15 @@ namespace Voluncare.Managment.Controllers
         [HttpPost]
         public async Task<ActionResult<ListResponseViewModel>> GetHelpRequestWithPagination([FromBody] GetWithPaginationViewModel viewModel)
         {
-            List<ListResponseViewModel> response;
+            IEnumerable<ListResponseViewModel> response;
             int? totalCount = 0;
 
             try
             {
                 var result = await this.unitOfWork.HelpRequestRepository.GetListWithIncludeAsync(viewModel.Page, viewModel.Count, default, include => include.User);
-                totalCount = (await GetTotalCount())?.Value;
+                totalCount = await this.unitOfWork.HelpRequestRepository.CountAsync(new Specification<HelpRequest>(req => req == req));
 
-                response = this.mapper.Map<List<ListResponseViewModel>>(result);
+                response = this.mapper.Map<IEnumerable<ListResponseViewModel>>(result.Items);
             }
             catch (Exception ex)
             {
@@ -78,7 +80,7 @@ namespace Voluncare.Managment.Controllers
                 var hrModel = await this.unitOfWork.HelpRequestRepository.GetEntityAsync(new Specification<HelpRequest>(hr => hr.Id == viewModel.RequestId));
 
                 hrModel.TakenVolunteerId = viewModel.TakenVolunteerId;
-                hrModel.Status = Core.Enums.HelpRequestStatus.InProgress;
+                hrModel.Status = Core.Enums.HelpRequestStatus.Accepted;
                 hrModel.TakenDate = DateTime.Now;
 
                 await this.unitOfWork.HelpRequestRepository.UpdateAsync(hrModel);
