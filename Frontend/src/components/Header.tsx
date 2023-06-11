@@ -15,6 +15,13 @@ function Header() {
         <img src={logo} alt="Your Logo" style={{ ...styles.logo }} />
       </Link>
 
+      { token ? 
+        <Link to="/profile" >
+          Edit Profile
+        </Link> : null
+      }
+
+
       <Button
         variant="contained"
         style={{ ...styles.button }}
