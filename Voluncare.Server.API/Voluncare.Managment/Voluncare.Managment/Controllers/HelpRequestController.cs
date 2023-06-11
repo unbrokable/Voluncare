@@ -81,7 +81,7 @@ namespace Voluncare.Managment.Controllers
 
                 hrModel.TakenVolunteerId = viewModel.TakenVolunteerId;
                 hrModel.Status = Core.Enums.HelpRequestStatus.Accepted;
-                hrModel.TakenDate = DateTime.Now;
+                hrModel.TakenDate = DateTime.UtcNow;
 
                 await this.unitOfWork.HelpRequestRepository.UpdateAsync(hrModel);
 
@@ -109,7 +109,7 @@ namespace Voluncare.Managment.Controllers
                 return BadRequest(new { error = ex });
             }
 
-            return Ok(result);
+            return Ok(new { count = result });
         }
     }
 }
