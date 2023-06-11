@@ -7,11 +7,13 @@ using Voluncare.Core.Interfaces;
 using Voluncare.Infrastructure.UnitOfWork;
 using Voluncare.Managment.BuilderExtensions;
 using Voluncare.Managment.MapperProfiles;
+using Voluncare.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<VolunteerComputationService>();
 
 builder.Services.AddControllers();
 
