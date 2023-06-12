@@ -1,13 +1,16 @@
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilState } from "recoil";
 import "./App.css";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import styles from "./styles/MainStyles";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import VolunteerMain from "./components/Volunteer/VolunteerMain";
 import EditProfile from "./components/EditProfile";
+import UserMain from "./components/User/UserMain";
+import { useEffect } from "react";
+import { tokenState } from "./store/store";
 
 function App() {
   const { VITE_API_URL_API } = import.meta.env;
@@ -21,8 +24,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/profile" element={<EditProfile />} />
-          {/* add dependency on role */}
-          <Route path="/main" element={<VolunteerMain />} />
+          <Route path="/vMain" element={<VolunteerMain />} />
+          <Route path="/uMain" element={<UserMain />} />
         </Routes>
       </div>
     </RecoilRoot>

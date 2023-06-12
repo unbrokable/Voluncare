@@ -33,7 +33,11 @@ const Registration: React.FC<RegistrationProps> = () => {
     await registration({ email, password, role, username }).then((data) => {
       setToken(data.data.token);
       setUser(data.data.user);
-      navigate("/main");
+      if (data.data.user.apllicationUserType === 0) {
+        navigate("/vMain");
+      } else if (data.data.user.apllicationUserType === 1) {
+        navigate("/uMain");
+      }
     });
   };
   return (
@@ -56,7 +60,7 @@ const Registration: React.FC<RegistrationProps> = () => {
         }}
       >
         <Typography variant="h4" sx={{ marginBottom: 2 }}>
-          Registration
+          Реєстрація
         </Typography>
         <div
           style={{
@@ -65,14 +69,14 @@ const Registration: React.FC<RegistrationProps> = () => {
           }}
         >
           <TextField
-            label="Username"
+            label="Ім’я користувача"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             sx={{ marginBottom: 2 }}
             required
           />
           <TextField
-            label="Email"
+            label="Електронна пошта"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -80,7 +84,7 @@ const Registration: React.FC<RegistrationProps> = () => {
             required
           />
           <TextField
-            label="Password"
+            label="Пароль"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -105,10 +109,10 @@ const Registration: React.FC<RegistrationProps> = () => {
             variant="contained"
             sx={{ marginBottom: 2 }}
           >
-            Sign In
+            Зареєструвати
           </Button>
           <RouterLink to="/login">
-            <Link>Already have an account?</Link>
+            <Link>Вже є аккаунт?</Link>
           </RouterLink>
         </div>
       </div>

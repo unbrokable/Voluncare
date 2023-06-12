@@ -13,6 +13,11 @@ export const userState = atom({
     email: "",
     apllicationUserType: 0,
     avatarImage: "",
-    phoneNumber: ""
+    phoneNumber: "",
   }, // default value (aka initial value)
+});
+
+export const helpRequestState = atom({
+  key: "helpRequest",
+  default: { list: [], count: 0 },
 });
