@@ -1,16 +1,25 @@
 import { useState } from "react";
-import { TextField, Button, Typography, Link } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Link,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { login } from "../services/Auth";
 import { useRecoilState } from "recoil";
 import { tokenState, userState } from "../store/store";
 import { useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [token, setToken] = useRecoilState(tokenState);
   const [user, setUser] = useRecoilState(userState);
@@ -19,7 +28,11 @@ const Login = () => {
     await login({ username: username, password: password }).then((data) => {
       setToken(data.data.token);
       setUser(data.data.user);
-      navigate("/main");
+      if (data.data.user.apllicationUserType === 0) {
+        navigate("/vMain");
+      } else if (data.data.user.apllicationUserType === 1) {
+        navigate("/uMain");
+      }
     });
   };
 
@@ -43,7 +56,7 @@ const Login = () => {
         }}
       >
         <Typography variant="h4" sx={{ marginBottom: 2 }}>
-          Login
+          Вхід
         </Typography>
 
         <div
@@ -53,15 +66,27 @@ const Login = () => {
           }}
         >
           <TextField
-            label="Username"
+            label="Ім’я користувача"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             sx={{ marginBottom: 2 }}
             required
           />
           <TextField
-            label="Password"
-            type="password"
+            label="Пароль"
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             sx={{ marginBottom: 2 }}
@@ -72,10 +97,10 @@ const Login = () => {
             variant="contained"
             sx={{ marginBottom: 2 }}
           >
-            Sign In
+            Уввійти
           </Button>
           <RouterLink to="/registration">
-            <Link>Don’t have an account yet?</Link>
+            <Link>Ще не маєш аккаунту?</Link>
           </RouterLink>
         </div>
       </div>
