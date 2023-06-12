@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Voluncare.Core.Entities;
 using Voluncare.Core.Interfaces;
 using Voluncare.Core.Specification;
+using Voluncare.Managment.ViewModels.HelpRequest;
 using Voluncare.Managment.ViewModels.Volunteer;
 
 namespace Voluncare.Managment.Controllers
@@ -63,6 +64,29 @@ namespace Voluncare.Managment.Controllers
             }
 
             return Ok(new { result = volunteerBaseInfo });
+        }
+
+        [HttpPost]
+        [Route("showAcceptedHR")]
+        public async Task<IActionResult> ShowAcceptedHR([FromBody] AcceptedHRViewModel viewModel)
+        {
+            IEnumerable<ListResponseViewModel> response;
+            int? totalCount = 0;
+
+            try
+            {
+                var result = await this.unitOfWork.HelpRequestRepository.GetListWithIncludeAsync(new Specification<HelpRequest>(hr => hr.TakenVolunteerId == viewModel.VolunteerId)
+                    , viewModel.Page, viewModel.Count, default, include => include.User);
+                totalCount = await this.unitOfWork.HelpRequestRepository.CountAsync(new Specification<HelpRequest>(hr => hr.TakenVolunteerId == viewModel.VolunteerId));
+
+                response = this.mapper.Map<IEnumerable<ListResponseViewModel>>(result.Items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+            return Ok(new { list = response, count = totalCount });
         }
     }
 }
