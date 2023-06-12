@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Voluncare.Core.Entities;
 using Voluncare.Core.Interfaces;
 using Voluncare.Core.Specification;
+using Voluncare.Managment.ViewModels.Comments;
 using Voluncare.Managment.ViewModels.HelpRequest;
 using Voluncare.Managment.ViewModels.Volunteer;
 
@@ -42,16 +43,21 @@ namespace Voluncare.Managment.Controllers
         public async Task<IActionResult> GetInfo([FromBody] Guid id)
         {
             VolunteerBaseInfoViewModel volunteerBaseInfo;
+            IEnumerable<CommentResponseViewModel> commentResponse;
 
             try
             {
-                var result = await this.unitOfWork.UserRepository.GetEntityAsync(new Specification<ApplicationUser>(user => user.Id == id));
+                var result = await this.unitOfWork.UserRepository.GetWithIncludeAsync(new Specification<ApplicationUser>(user => user.Id == id));
+
+                var comments = await this.unitOfWork.CommentRepository.GetListWithIncludeAsync(new Specification<Comment>(cm => cm.ReceiverId == id),
+                    1, 5, default, include => include.User);
 
                 if (result == null)
                 {
                     return NotFound();
                 }
 
+                commentResponse = this.mapper.Map<IEnumerable<CommentResponseViewModel>>(comments.Items);
                 volunteerBaseInfo = this.mapper.Map<VolunteerBaseInfoViewModel>(result);
 
                 // business logic
@@ -63,12 +69,12 @@ namespace Voluncare.Managment.Controllers
                 return BadRequest(ex.Message);
             }
 
-            return Ok(new { result = volunteerBaseInfo });
+            return Ok(new { result = volunteerBaseInfo, comments = commentResponse });
         }
 
         [HttpPost]
         [Route("showAcceptedHR")]
-        public async Task<IActionResult> ShowAcceptedHR([FromBody] AcceptedHRViewModel viewModel)
+        public async Task<ActionResult<ListResponseViewModel>> ShowAcceptedHR([FromBody] AcceptedHRViewModel viewModel)
         {
             IEnumerable<ListResponseViewModel> response;
             int? totalCount = 0;

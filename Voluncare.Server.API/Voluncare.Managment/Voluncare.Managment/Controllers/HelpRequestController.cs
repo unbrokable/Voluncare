@@ -23,8 +23,8 @@ namespace Voluncare.Managment.Controllers
             this.mapper = mapper;
         }
 
-        [Route("create")]
         [HttpPost]
+        [Route("create")]
         public async Task<IActionResult> CreateHelpRequest([FromBody] CreateHRViewModel viewModel)
         {
             var model = this.mapper.Map<HelpRequest>(viewModel);
@@ -49,8 +49,8 @@ namespace Voluncare.Managment.Controllers
             return Ok();
         }
 
-        [Route("getList")]
         [HttpPost]
+        [Route("getList")]
         public async Task<ActionResult<ListResponseViewModel>> GetHelpRequestWithPagination([FromBody] GetWithPaginationViewModel viewModel)
         {
             IEnumerable<ListResponseViewModel> response;
@@ -94,8 +94,32 @@ namespace Voluncare.Managment.Controllers
             return Ok(new { list = response, count = totalCount });
         }
 
-        [Route("assingVolunteer")]
         [HttpPost]
+        [Route("userRequests")]
+        public async Task<ActionResult<ListResponseViewModel>> UserRequests([FromBody] UserRequestsViewModel viewModel)
+        {
+            IEnumerable<ListResponseViewModel> response;
+            int? totalCount = 0;
+
+            try
+            {
+                var result = await this.unitOfWork.HelpRequestRepository.GetListWithIncludeAsync(new Specification<HelpRequest>(hr => hr.UserId == viewModel.UserId)
+                    , viewModel.Page, viewModel.Count, default, include => include.Volunteer);
+                totalCount = await this.unitOfWork.HelpRequestRepository.CountAsync(new Specification<HelpRequest>(hr => hr.UserId == viewModel.UserId));
+
+                response = this.mapper.Map<IEnumerable<ListResponseViewModel>>(result.Items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+            return Ok(new { list = response, count = totalCount });
+        }
+
+
+        [HttpPost]
+        [Route("assingVolunteer")]
         public async Task<IActionResult> AssignVolunteer([FromBody] TakeRequestViewModel viewModel)
         {
             try
@@ -118,8 +142,8 @@ namespace Voluncare.Managment.Controllers
             return Ok();
         }
 
-        [Route("totalCount")]
         [HttpGet]
+        [Route("totalCount")]
         public async Task<ActionResult<int>> GetTotalCount()
         {
             int result = 0;
