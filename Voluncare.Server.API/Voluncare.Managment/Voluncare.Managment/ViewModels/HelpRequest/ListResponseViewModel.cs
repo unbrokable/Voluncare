@@ -6,6 +6,8 @@ namespace Voluncare.Managment.ViewModels.HelpRequest
     {
         public Guid UserId { get; set; }
 
+        public Guid HelpRequestId { get; set; }
+
         public Guid? TakenVolunteerId { get; set; }
 
         public string UserName { get; set; }
