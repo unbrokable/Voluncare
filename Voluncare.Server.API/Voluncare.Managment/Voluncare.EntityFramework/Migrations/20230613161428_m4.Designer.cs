@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Voluncare.EntityFramework.Context;
@@ -11,9 +12,10 @@ using Voluncare.EntityFramework.Context;
 namespace Voluncare.EntityFramework.Migrations
 {
     [DbContext(typeof(VoluncareDbContext))]
-    partial class VoluncareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230613161428_m4")]
+    partial class m4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -123,5 +123,10 @@ namespace Voluncare.Infrastructure.Repository
         {
             return await this.entities.CountAsync(specification.Expression);
         }
+
+        public async Task<double> AverageAsync(Specification<TEntity> specification, Expression<Func<TEntity, double>> expression)
+        {
+            return await this.entities.Where(specification.Expression).AverageAsync(expression);
+        }
     }
 }
