@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Voluncare.Core.Entities;
 using Voluncare.Core.Interfaces;
+using Voluncare.Core.Specification;
 using Voluncare.Managment.ViewModels.Comments;
 
 namespace Voluncare.Managment.Controllers
@@ -46,6 +47,30 @@ namespace Voluncare.Managment.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("get")]
+        public async Task<ActionResult<CommentResponseViewModel>> Get([FromBody] GetCommentViewModel viewModel)
+        {
+            IEnumerable<CommentResponseViewModel> commentResponse;
+
+            try
+            {
+                var comments = await this.unitOfWork.CommentRepository.GetListWithIncludeAsync(new Specification<Comment>(cm => cm.ReceiverId == viewModel.ReceiverId),
+                    1, 5, default, include => include.User);
+
+                commentResponse = this.mapper.Map<IEnumerable<CommentResponseViewModel>>(comments.Items);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+
+            return Ok(commentResponse);
         }
     }
 }
