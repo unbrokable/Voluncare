@@ -62,7 +62,10 @@ namespace Voluncare.Managment.Controllers
 
                 // business logic
                 volunteerBaseInfo.TrustLevel = new Random().Next(0, 5);
-                volunteerBaseInfo.AverageRating = new Random().Next(0, 5);
+
+                volunteerBaseInfo.AverageRating = await this.unitOfWork.EstimateRepository.AverageAsync(
+                    new Specification<Estimate>(es => es == es),
+                    prop => prop.Rating); ;
             }
             catch (Exception ex)
             {
