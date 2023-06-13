@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Voluncare.EntityFramework.Context;
@@ -11,9 +12,10 @@ using Voluncare.EntityFramework.Context;
 namespace Voluncare.EntityFramework.Migrations
 {
     [DbContext(typeof(VoluncareDbContext))]
-    partial class VoluncareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230613161001_m3")]
+    partial class m3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,9 +295,6 @@ namespace Voluncare.EntityFramework.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("OrganizationId")
                         .HasColumnType("uuid");

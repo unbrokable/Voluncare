@@ -15,7 +15,11 @@ namespace Voluncare.Core.Entities
 
         public Guid? UserId { get; set; }
 
+        public Guid? ReceiverId { get; set; }
+
         public double Rating { get; set; }
+
+        public DateTime Created { get; set; }
 
         public ApplicationUser User { get; set; }
 

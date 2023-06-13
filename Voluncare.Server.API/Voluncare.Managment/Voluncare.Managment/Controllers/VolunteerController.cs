@@ -40,16 +40,16 @@ namespace Voluncare.Managment.Controllers
 
         [HttpPost]
         [Route("getInfo")]
-        public async Task<IActionResult> GetInfo([FromBody] Guid id)
+        public async Task<ActionResult<VolunteerBaseInfoViewModel>> GetInfo([FromBody] GetBaseInfoViewModel viewModel)
         {
             VolunteerBaseInfoViewModel volunteerBaseInfo;
             IEnumerable<CommentResponseViewModel> commentResponse;
 
             try
             {
-                var result = await this.unitOfWork.UserRepository.GetWithIncludeAsync(new Specification<ApplicationUser>(user => user.Id == id));
+                var result = await this.unitOfWork.UserRepository.GetWithIncludeAsync(new Specification<ApplicationUser>(user => user.Id == viewModel.Id));
 
-                var comments = await this.unitOfWork.CommentRepository.GetListWithIncludeAsync(new Specification<Comment>(cm => cm.ReceiverId == id),
+                var comments = await this.unitOfWork.CommentRepository.GetListWithIncludeAsync(new Specification<Comment>(cm => cm.ReceiverId == viewModel.Id),
                     1, 5, default, include => include.User);
 
                 if (result == null)

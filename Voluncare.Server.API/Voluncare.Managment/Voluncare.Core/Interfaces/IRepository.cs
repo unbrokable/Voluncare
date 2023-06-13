@@ -45,5 +45,7 @@ namespace Voluncare.Core.Interfaces
         Task SaveChanges();
 
         Task<int> CountAsync(Specification<TEntity> specification);
+
+        Task<double> AverageAsync(Specification<TEntity> specification, Expression<Func<TEntity, double>> expression);
     }
 }
