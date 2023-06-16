@@ -181,7 +181,7 @@ namespace Voluncare.Managment.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("remove")]
         public async Task<IActionResult> RemoveHR([FromBody] RemoveHRViewModel viewModel)
         {
