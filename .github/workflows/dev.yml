@@ -1,4 +1,4 @@
-name: Publish services
+name: CI/CD
 
 on: 
   workflow_dispatch:
