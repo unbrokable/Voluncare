@@ -158,5 +158,47 @@ namespace Voluncare.Managment.Controllers
 
             return Ok(new { count = result });
         }
+
+        [HttpPost]
+        [Route("complete")]
+        public async Task<IActionResult> CompleteHR([FromBody] CompleteHRViewModel viewModel)
+        {
+            try
+            {
+                var entity = await this.unitOfWork.HelpRequestRepository.GetEntityAsync(new Specification<HelpRequest>(hr => hr.Id == viewModel.RequestId));
+
+                entity.Status = Core.Enums.HelpRequestStatus.Completed;
+
+                await this.unitOfWork.HelpRequestRepository.UpdateAsync(entity);
+
+                await this.unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("remove")]
+        public async Task<IActionResult> RemoveHR([FromBody] RemoveHRViewModel viewModel)
+        {
+            try
+            {
+                var entity = await this.unitOfWork.HelpRequestRepository.GetEntityAsync(new Specification<HelpRequest>(hr => hr.Id == viewModel.RequestId));
+
+                await this.unitOfWork.HelpRequestRepository.RemoveAsync(entity);
+
+                await this.unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+
+            return Ok();
+        }
     }
 }

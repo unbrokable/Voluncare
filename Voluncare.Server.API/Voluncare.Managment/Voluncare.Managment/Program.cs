@@ -18,6 +18,7 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<VolunteerComputationService>();
 
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddControllers();
 
 // DbContext
