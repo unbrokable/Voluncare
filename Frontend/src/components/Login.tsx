@@ -6,6 +6,7 @@ import {
   Link,
   InputAdornment,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { login } from "../services/Auth";
@@ -20,20 +21,30 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState(false);
 
   const [token, setToken] = useRecoilState(tokenState);
   const [user, setUser] = useRecoilState(userState);
 
   const handleSubmit = async (e: any) => {
-    await login({ username: username, password: password }).then((data) => {
-      setToken(data.data.token);
-      setUser(data.data.user);
-      if (data.data.user.apllicationUserType === 0) {
-        navigate("/vMain");
-      } else if (data.data.user.apllicationUserType === 1) {
-        navigate("/uMain");
-      }
-    });
+    setLoading(true);
+    await login({ username: username, password: password })
+      .then((data) => {
+        setToken(data.data.token);
+        setUser(data.data.user);
+        if (data.data.user.apllicationUserType === 0) {
+          navigate("/vMain");
+        } else if (data.data.user.apllicationUserType === 1) {
+          navigate("/uMain");
+        }
+        setLoading(false);
+      })
+      .catch((er) => {
+        setError(true);
+        setLoading(false);
+      });
   };
 
   return (
@@ -67,13 +78,18 @@ const Login = () => {
         >
           <TextField
             label="Ім’я користувача"
+            error={error}
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setError(false);
+            }}
             sx={{ marginBottom: 2 }}
             required
           />
           <TextField
             label="Пароль"
+            error={error}
             type={showPassword ? "text" : "password"}
             InputProps={{
               endAdornment: (
@@ -88,17 +104,33 @@ const Login = () => {
               ),
             }}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError(false);
+            }}
             sx={{ marginBottom: 2 }}
             required
           />
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            sx={{ marginBottom: 2 }}
-          >
-            Уввійти
-          </Button>
+          {!loading && (
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              sx={{ marginBottom: 2 }}
+            >
+              Уввійти
+            </Button>
+          )}
+          {loading && (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          )}
           <RouterLink to="/registration">
             <Link>Ще не маєш аккаунту?</Link>
           </RouterLink>
