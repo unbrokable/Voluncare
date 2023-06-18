@@ -12,6 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@microsoft/applicationinsights-react-js": "^3.4.2",
+    "@microsoft/applicationinsights-web": "^2.8.12",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.11.11",
     "axios": "^1.4.0",

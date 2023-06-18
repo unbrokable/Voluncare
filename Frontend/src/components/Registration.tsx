@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
   Link,
+  CircularProgress,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { registration } from "../services/Auth";
@@ -28,17 +29,27 @@ const Registration: React.FC<RegistrationProps> = () => {
 
   const [token, setToken] = useRecoilState(tokenState);
   const [user, setUser] = useRecoilState(userState);
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (e: any) => {
-    await registration({ email, password, role, username }).then((data) => {
-      setToken(data.data.token);
-      setUser(data.data.user);
-      if (data.data.user.apllicationUserType === 0) {
-        navigate("/vMain");
-      } else if (data.data.user.apllicationUserType === 1) {
-        navigate("/uMain");
-      }
-    });
+    setLoading(true);
+    await registration({ email, password, role, username })
+      .then((data) => {
+        setToken(data.data.token);
+        setUser(data.data.user);
+        if (data.data.user.apllicationUserType === 0) {
+          navigate("/vMain");
+        } else if (data.data.user.apllicationUserType === 1) {
+          navigate("/uMain");
+        }
+        setLoading(false);
+      })
+      .catch((er) => {
+        setError(true);
+        setLoading(false);
+      });
   };
   return (
     <div
@@ -70,24 +81,36 @@ const Registration: React.FC<RegistrationProps> = () => {
         >
           <TextField
             label="Ім’я користувача"
+            error={error}
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setError(false);
+            }}
             sx={{ marginBottom: 2 }}
             required
           />
           <TextField
             label="Електронна пошта"
+            error={error}
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(false);
+            }}
             sx={{ marginBottom: 2 }}
             required
           />
           <TextField
             label="Пароль"
+            error={error}
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError(false);
+            }}
             sx={{ marginBottom: 2 }}
             required
           />
@@ -104,13 +127,26 @@ const Registration: React.FC<RegistrationProps> = () => {
               <MenuItem value={1}>Seeking Help</MenuItem>
             </Select>
           </FormControl>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            sx={{ marginBottom: 2 }}
-          >
-            Зареєструвати
-          </Button>
+          {!loading && (
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              sx={{ marginBottom: 2 }}
+            >
+              Зареєструвати
+            </Button>
+          )}
+          {loading && (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          )}
           <RouterLink to="/login">
             <Link>Вже є аккаунт?</Link>
           </RouterLink>
